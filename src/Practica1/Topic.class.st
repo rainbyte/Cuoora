@@ -9,16 +9,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-Topic class >> crearTopic: nombre queRefiere: descr [
-	| auxTopic |
-	auxTopic := self.
-	auxTopic new;
-		nombre: nombre;
-		descripcion: descr .
-	^auxTopic.
-]
-
-{ #category : #'as yet unclassified' }
 Topic class >> withName: nombre [
 
 	^self new _name: nombre; yourself 
@@ -49,9 +39,8 @@ Topic >> description [
 { #category : #initialization }
 Topic >> initialize [
 	super initialize.
-	nombre := ' '.
-	descripcion := ''.
-	preguntas := OrderedCollection new
+	name := ''.
+	description := ''.
 ]
 
 { #category : #accessing }

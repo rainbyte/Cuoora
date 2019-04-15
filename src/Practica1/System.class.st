@@ -90,3 +90,8 @@ System >> obtainQuestionsRelevantToUser: anUser sortedByDateTake: aNumber [
 	^((relevantQuestions sorted: [:x :y | x creation > y creation]) first: howMany)
 
 ]
+
+{ #category : #'as yet unclassified' }
+System >> obtainUsers [
+	^users
+]
