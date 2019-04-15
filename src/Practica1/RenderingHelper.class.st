@@ -11,7 +11,11 @@ RenderingHelper class >> renderHeaderViewByUser: anUser inComponent: aComponent 
 		with: [
 			html div
 				id: 'header-left';
-				with: [ html paragraph: 'CuOOra' ].
+				with: [
+					html anchor
+						callback: [ aComponent call: (CuooraHome withUser: anUser) ];
+						with: [	html paragraph: 'CuOOra'	].
+				].
 			html div
 				id: 'header-right';
 				with: [
