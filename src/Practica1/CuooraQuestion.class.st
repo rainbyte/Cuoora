@@ -84,21 +84,7 @@ CuooraQuestion >> _renderFooterOn: html [
 
 { #category : #rendering }
 CuooraQuestion >> _renderHeaderOn: html [
-	html div
-		id: 'header';
-		with: [
-			html div
-				id: 'header-left';
-				with: [ html paragraph: 'CuOOra' ].
-			html div
-				id: 'header-right';
-				with: [
-					html paragraph: ('User "{1}"' format: {currentUser name}).
-					html anchor
-						callback: [ self call: (CuooraLogin new) ];
-						with: 'Log out'.
-				].
-		]
+	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html
 ]
 
 { #category : #rendering }
