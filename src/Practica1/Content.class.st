@@ -12,7 +12,26 @@ Class {
 
 { #category : #accessing }
 Content >> addReaction: aReaction [
-	reactions add: aReaction
+	reactions detect: [ :r | r user = aReaction user ]
+		ifFound: [ :r |
+			(r emotion = aReaction emotion) ifFalse: [
+				reactions remove: r.
+				reactions add: aReaction
+			]
+		] 
+		ifNone: [
+			reactions add: aReaction
+		] 
+]
+
+{ #category : #'as yet unclassified' }
+Content >> countDislikes [
+	^reactions count: [ :reaction | reaction emotion = Emotion dislike ].
+]
+
+{ #category : #'as yet unclassified' }
+Content >> countLikes [
+	^reactions count: [ :reaction | reaction emotion = Emotion like ].
 ]
 
 { #category : #accessing }
