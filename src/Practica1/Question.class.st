@@ -10,6 +10,16 @@ Class {
 	#category : #'Practica1-Core'
 }
 
+{ #category : #accessing }
+Question class >> _rawTopicsToTopics: rawTopics [
+  ^(rawTopics = '') ifTrue: [ Bag new ] ifFalse: [ (rawTopics splitOn: ',') asBag ]
+]
+
+{ #category : #'as yet unclassified' }
+Question class >> withTitle: aTitle andUser: aUser andRawTopics: rawTopics andText: text [
+	^self new _title: aTitle; _user: aUser; _topics: (self _rawTopicsToTopics: rawTopics); _text: text; yourself
+]
+
 { #category : #'as yet unclassified' }
 Question class >> withTitle: aTitle andUser: aUser andTopics: topics andText: text [
 	^self new _title: aTitle; _user: aUser; _topics: topics; _text: text; yourself
@@ -27,7 +37,7 @@ Question >> _title: anObject [
 
 { #category : #accessing }
 Question >> _topics: theTopics [
-	topics := theTopics
+	topics := theTopics asBag
 ]
 
 { #category : #accessing }

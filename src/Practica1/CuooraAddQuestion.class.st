@@ -50,11 +50,6 @@ CuooraAddQuestion >> _questionTitle: anObject [
 	_questionTitle := anObject
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _rawTopicsToTopics: rawTopics [
-  ^(rawTopics = '') ifTrue: [ Bag new ] ifFalse: [ (rawTopics splitOn: ',') asBag ]
-]
-
 { #category : #'as yet unclassified' }
 CuooraAddQuestion >> _renderHeaderOn: html [
 	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html 
@@ -83,7 +78,7 @@ CuooraAddQuestion >> renderContentOn: html [
 				question := Question
 					withTitle: _questionTitle
 					andUser: currentUser
-					andTopics: (self _rawTopicsToTopics: _questionRawTopics)
+					andRawTopics: _questionRawTopics
 					andText: _questionText.
 				System getInstance addQuestion: question.
 				self call: (CuooraQuestion withCurrentUser: currentUser andQuestion: question)
