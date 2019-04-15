@@ -24,7 +24,7 @@ CuooraQuestion >> _question: aQuestion [
 ]
 
 { #category : #rendering }
-CuooraQuestion >> renderAnswer: anAnswer withBrush: html [
+CuooraQuestion >> _renderAnswer: anAnswer withBrush: html [
 	html div
 		with: [
 			html div
@@ -75,16 +75,7 @@ CuooraQuestion >> renderAnswer: anAnswer withBrush: html [
 ]
 
 { #category : #rendering }
-CuooraQuestion >> renderContentOn: html [
-	self renderHeaderOn: html.
-	html horizontalRule.
-	self renderQuestionOn: html.	
-	html horizontalRule.
-	self renderFooterOn: html.
-]
-
-{ #category : #rendering }
-CuooraQuestion >> renderFooterOn: html [
+CuooraQuestion >> _renderFooterOn: html [
 	html paragraph: 'No more answers'.
 	html anchor
 		callback: [ self call: (CuooraAddAnswer withCurrentUser: currentUser toQuestion: question) ];
@@ -92,7 +83,7 @@ CuooraQuestion >> renderFooterOn: html [
 ]
 
 { #category : #rendering }
-CuooraQuestion >> renderHeaderOn: html [
+CuooraQuestion >> _renderHeaderOn: html [
 	html div
 		id: 'header';
 		with: [
@@ -111,10 +102,19 @@ CuooraQuestion >> renderHeaderOn: html [
 ]
 
 { #category : #rendering }
-CuooraQuestion >> renderQuestionOn: html [
+CuooraQuestion >> _renderQuestionOn: html [
 	RenderingHelper renderQuestion: question viewByUser: currentUser inComponent: self usingBrush: html. 
-	(question answers) do: [ :answer | self renderAnswer: answer withBrush: html ].
+	(question answers) do: [ :answer | self _renderAnswer: answer withBrush: html ].
 	
+]
+
+{ #category : #rendering }
+CuooraQuestion >> renderContentOn: html [
+	self _renderHeaderOn: html.
+	html horizontalRule.
+	self _renderQuestionOn: html.	
+	html horizontalRule.
+	self _renderFooterOn: html.
 ]
 
 { #category : #hooks }

@@ -24,14 +24,7 @@ CuooraUserProfile >> _profileUser: anUser [
 ]
 
 { #category : #rendering }
-CuooraUserProfile >> renderContentOn: html [
-	self renderHeader: html.
-	html horizontalRule.
-	self renderProfile: html.
-]
-
-{ #category : #rendering }
-CuooraUserProfile >> renderHeader: html [
+CuooraUserProfile >> _renderHeaderOn: html [
 	html div
 		id: 'header';
 		with: [
@@ -50,7 +43,7 @@ CuooraUserProfile >> renderHeader: html [
 ]
 
 { #category : #rendering }
-CuooraUserProfile >> renderProfile: html [
+CuooraUserProfile >> _renderProfileOn: html [
 	html heading: ('Questions by {1}' format: {(profileUser name)}).
 	html anchor
 		callback: [ currentUser follow: profileUser ];
@@ -58,6 +51,13 @@ CuooraUserProfile >> renderProfile: html [
 	((System getInstance) obtainQuestionsByUser: profileUser)
 		do: [ :question | RenderingHelper renderQuestion: question viewByUser: currentUser inComponent: self usingBrush: html ]
 
+]
+
+{ #category : #rendering }
+CuooraUserProfile >> renderContentOn: html [
+	self _renderHeaderOn: html.
+	html horizontalRule.
+	self _renderProfileOn: html.
 ]
 
 { #category : #hooks }

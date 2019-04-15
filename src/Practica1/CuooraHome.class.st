@@ -12,25 +12,8 @@ CuooraHome class >> withUser: aUser [
 	^ CuooraHome new _user: aUser; yourself 
 ]
 
-{ #category : #accessing }
-CuooraHome >> _user: aUser [
-	user := aUser
-]
-
-{ #category : #initialization }
-CuooraHome >> initialize [
-	super initialize.
-]
-
 { #category : #rendering }
-CuooraHome >> renderContentOn: html [
-	self renderHeader: html.
-	html horizontalRule.
-	self renderLastQuestions: html.
-]
-
-{ #category : #rendering }
-CuooraHome >> renderHeader: html [
+CuooraHome >> _renderHeaderOn: html [
 	html div
 		id: 'header';
 		with: [
@@ -46,6 +29,23 @@ CuooraHome >> renderHeader: html [
 						with: 'Log out'.
 				].
 		]
+]
+
+{ #category : #accessing }
+CuooraHome >> _user: aUser [
+	user := aUser
+]
+
+{ #category : #initialization }
+CuooraHome >> initialize [
+	super initialize.
+]
+
+{ #category : #rendering }
+CuooraHome >> renderContentOn: html [
+	self _renderHeaderOn: html.
+	html horizontalRule.
+	self renderLastQuestions: html.
 ]
 
 { #category : #rendering }
