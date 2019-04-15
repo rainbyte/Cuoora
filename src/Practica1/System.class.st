@@ -22,6 +22,29 @@ System class >> resetInstance [
 	instance := self new
 ]
 
+{ #category : #initialization }
+System class >> resetInstanceToExample [
+	| userPedro userDiego userJuan questionPedro questionDiego |
+	
+	self resetInstance.
+	
+	userPedro := User withName: 'pedro@cuoora.com' andPassword: 'pedro@cuoora.com'.
+	userDiego := User withName: 'diego@cuoora.com' andPassword: 'diego@cuoora.com'.
+	userJuan := User withName: 'juan@cuoora.com' andPassword: 'juan@cuoora.com'.
+	
+	questionPedro := Question withTitle: '¿Para qué sirve el método SetUp?' andUser: userPedro andRawTopics: 'OO1,Test de unidad' andText: ''.
+	questionPedro addAnswer: (
+		Answer withUser: userDiego
+			andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de cada test.').
+	
+	questionDiego := Question withTitle: '¿Qué significa #messageNotUnderstood?' andUser: userDiego andRawTopics: 'OO1,Smalltalk' andText: ''.
+	questionDiego addAnswer: (
+		Answer withUser: userPedro
+			andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.').
+	
+	instance addUser: userPedro; addUser: userDiego; addUser: userJuan; addQuestion: questionPedro; addQuestion: questionDiego.
+]
+
 { #category : #'as yet unclassified' }
 System >> addQuestion: question [
 	questions add: question
