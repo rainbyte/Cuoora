@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #accessing }
+Content >> addReaction: aReaction [
+	reactions add: aReaction
+]
+
+{ #category : #accessing }
 Content >> creation [
 	^ creation
 ]
@@ -18,6 +23,13 @@ Content >> creation [
 { #category : #accessing }
 Content >> creation: anObject [
 	creation := anObject
+]
+
+{ #category : #initialization }
+Content >> initialize [
+	creation := DateAndTime now.
+	reactions := Bag new.
+	text := ''.
 ]
 
 { #category : #accessing }

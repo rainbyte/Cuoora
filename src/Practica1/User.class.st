@@ -32,6 +32,12 @@ User >> creation [
 ]
 
 { #category : #accessing }
+User >> follow: aUser [
+	followList add: aUser
+
+]
+
+{ #category : #accessing }
 User >> followList [
 	^followList
 ]

@@ -23,26 +23,46 @@ CuooraHome >> initialize [
 ]
 
 { #category : #rendering }
-CuooraHome >> renderContentOn: htmlCanvas [
-	self renderHeader: htmlCanvas.
-"	self renderLastQuestions: htmlCanvas."
+CuooraHome >> renderContentOn: html [
+	self renderHeader: html.
+	html horizontalRule.
+	self renderLastQuestions: html.
 ]
 
 { #category : #rendering }
 CuooraHome >> renderHeader: html [
-	(html div)
+	html div
 		id: 'header';
 		with: [
-			html paragraph: [ 
-				html render: 'CuOOra'.
-				html render: ('{1}' format: {user name})
-			]
+			html div
+				id: 'header-left';
+				with: [ html paragraph: 'CuOOra' ].
+			html div
+				id: 'header-right';
+				with: [
+					html paragraph: ('User "{1}"' format: {user name}).
+					html anchor
+						callback: [ self call: (CuooraLogin new) ];
+						with: 'Log out'.
+				].
 		]
+]
+
+{ #category : #rendering }
+CuooraHome >> renderLastQuestions: html [
+	html div
+		id: 'content';
+		with: [
+			html anchor
+				callback: [	self call: (CuooraAddQuestion withCurrentUser: user) ];
+				with: '(+) New question'.
+			html heading: 'Last questions'.
+			((System getInstance) obtainQuestionsRelevantToUser: user sortedByDateTake: 5)
+				do: [ :question | RenderingHelper renderQuestion: question viewByUser: user inComponent: self usingBrush: html ]
+		].
 ]
 
 { #category : #hooks }
 CuooraHome >> style [
-	^	'
-		p { color: red };
-	'
+	^	RenderingHelper style
 ]

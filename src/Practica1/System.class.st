@@ -22,6 +22,11 @@ System class >> resetInstance [
 	instance := self new
 ]
 
+{ #category : #'as yet unclassified' }
+System >> addQuestion: question [
+	questions add: question
+]
+
 { #category : #adding }
 System >> addUser: aUser [
 	users detect: [ :u | u name = aUser name ]
@@ -75,4 +80,13 @@ System >> obtainQuestionsByUser: user [
 { #category : #'as yet unclassified' }
 System >> obtainQuestionsRelevantToUser: user [
 	^(questions select: [ :q | q isRelevantToUser: user]) 
+]
+
+{ #category : #'as yet unclassified' }
+System >> obtainQuestionsRelevantToUser: anUser sortedByDateTake: aNumber [
+	| relevantQuestions howMany |
+	relevantQuestions := self obtainQuestionsRelevantToUser: anUser.
+	howMany := aNumber min: (relevantQuestions size).
+	^((relevantQuestions sorted: [:x :y | x creation > y creation]) first: howMany)
+
 ]
