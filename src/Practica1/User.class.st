@@ -26,6 +26,11 @@ User >> _password: anObject [
 	password := anObject
 ]
 
+{ #category : #adding }
+User >> addInterestInTopic: aTopic [
+	topics add: aTopic
+]
+
 { #category : #accessing }
 User >> creation [
 	^ creation

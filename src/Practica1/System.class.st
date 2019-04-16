@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'users',
-		'questions'
+		'questions',
+		'topics'
 	],
 	#classInstVars : [
 		'instance'
@@ -51,6 +52,11 @@ System >> addQuestion: question [
 ]
 
 { #category : #adding }
+System >> addTopic: aTopic [
+	topics detect: [ :x | x name = aTopic name ] ifNone: [ topics add: aTopic ]
+]
+
+{ #category : #adding }
 System >> addUser: aUser [
 	users detect: [ :u | u name = aUser name ]
 		ifNone: [
@@ -68,6 +74,7 @@ System >> deleteQuestion: question [
 System >> initialize [
 	questions := Bag new.
 	users := Set new.
+	topics := Bag new.
 ]
 
 { #category : #'as yet unclassified' }
@@ -80,7 +87,7 @@ System >> loginWithUsername: aUsername andPassword: aPassword [
 System >> obtainAnswersByUser: user [
 	| byUser reduction |
 	byUser := [ :answer | answer user = user ].
-	reduction := [ :q :acc | acc addAll: (q answers select: byUser) ].
+	reduction := [ :acc :q | acc addAll: (q answers select: byUser) ].
 	^(questions inject: Bag new into: reduction)
 	"user collect y flattened o mejor flatCollect.... y usar asBag, asSet para asegurarme"
 ]
@@ -92,7 +99,7 @@ System >> obtainAnswersToQuestion: question [
 
 { #category : #'as yet unclassified' }
 System >> obtainQuestionsByTopic: topic [
-	^questions select: [ :q | q topics contains: topic ]
+	^questions select: [ :q | (q topics) anySatisfy: [ :topicName | topicName = topic name] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -117,4 +124,9 @@ System >> obtainQuestionsRelevantToUser: anUser sortedByDateTake: aNumber [
 { #category : #'as yet unclassified' }
 System >> obtainUsers [
 	^users
+]
+
+{ #category : #accessing }
+System >> topics [
+	^ topics
 ]

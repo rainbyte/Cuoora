@@ -60,13 +60,14 @@ SystemTest >> testBorrarPregunta [
 
 { #category : #tests }
 SystemTest >> testCrearTopico [
-	| auxTopics |
+	| auxSys |
 	
-	auxTopics := Bag new.
-	auxTopics add: (Topic withName: 'OO1' andDescription: 'Objetos 1' ).
-	auxTopics add: (Topic withName: 'TDD' andDescription: 'Test Driven Development' ).
+	auxSys := System new.
+	auxSys addTopic: (Topic withName: 'OO1' andDescription: 'Objetos 1' ).
+	auxSys addTopic: (Topic withName: 'OO1' andDescription: 'Objetos 1' ).
+	auxSys addTopic: (Topic withName: 'TDD' andDescription: 'Test Driven Development' ).
 	
-	self assert: false equals: true
+	self assert: ((auxSys topics) size) equals: 2
 ]
 
 { #category : #tests }
@@ -137,64 +138,40 @@ SystemTest >> testPreguntasDeInteresPorSiguindo [
 
 { #category : #tests }
 SystemTest >> testPreguntasDeInteresPorTopico [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp auxTopics findTopic lista |
+	| auxSys auxUser1 auxUser2 auxPreg1 auxPreg2 auxPreg3 |
 
 	auxSys := System new.
-	findTopic := Topic withName: 'OO1' andDescription: ''.
-	auxTopics := Bag new.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Test de Unidad' andDescription: '' ).
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxUser1 addInterestInTopic: 'BBB'. 
 	auxSys addUser: auxUser1.
 	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
 	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: auxTopics andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxTopics removeAll.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Smalltalk' andDescription: '' ).
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: auxTopics  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
-	lista := auxSys obtainQuestionsByTopic: findTopic.
-	self assert: (lista size ) equals: 2.
-	 
-
-
+	auxPreg1 := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: 'AAA,BBB' andText: ''.
+	auxSys addQuestion: auxPreg1.
+	auxPreg2 := Question withTitle: '¿Qué significa x? ' andUser: auxUser2 andRawTopics: 'BBB,CCC' andText: ''.
+	auxSys addQuestion: auxPreg2.
+	auxPreg3 := Question withTitle: '¿Qué es un x? ' andUser: auxUser2 andRawTopics: 'CCC,DDD' andText: ''.
+	auxSys addQuestion: auxPreg3.
+	self assert: ((auxSys obtainQuestionsRelevantToUser: auxUser1) size) equals: 2.
 ]
 
 { #category : #tests }
 SystemTest >> testPreguntasDeTopico [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp auxTopics findTopic lista |
+	| auxSys auxUser1 auxUser2 auxPreg1 auxPreg2 auxPreg3 |
 
 	auxSys := System new.
-	findTopic := Topic withName: 'OO1' andDescription: ''.
-	auxTopics := Bag new.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Test de Unidad' andDescription: '' ).
 	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
 	auxSys addUser: auxUser1.
 	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
 	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: auxTopics andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxTopics removeAll.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Smalltalk' andDescription: '' ).
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: auxTopics  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
-	lista := auxSys obtainQuestionsByTopic: findTopic.
-	self assert: (lista size ) equals: 2.
-	 
-
-
+	auxUser1 follow: auxUser2.
+	auxPreg1 := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: 'AAA,BBB' andText: ''.
+	auxSys addQuestion: auxPreg1.
+	auxPreg2 := Question withTitle: '¿Qué significa x? ' andUser: auxUser2 andRawTopics: 'BBB,CCC' andText: ''.
+	auxSys addQuestion: auxPreg2.
+	auxPreg3 := Question withTitle: '¿Qué es un x? ' andUser: auxUser2 andRawTopics: 'CCC,DDD' andText: ''.
+	auxSys addQuestion: auxPreg3.
+	self assert: ((auxSys obtainQuestionsByTopic: (Topic withName: 'BBB')) size) equals: 2.
 ]
 
 { #category : #tests }
@@ -248,37 +225,6 @@ SystemTest >> testRespuestaDeUsuario [
 	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
 	auxPreg  addAnswer: auxResp.
 	self assert: ((auxSys obtainAnswersByUser: auxUser2) size) equals: 1
-
-
-]
-
-{ #category : #tests }
-SystemTest >> testSistema [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp auxTopics findTopic lista |
-
-	auxSys := System new.
-	findTopic := Topic withName: 'OO1' andDescription: ''.
-	auxTopics := Bag new.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Test de Unidad' andDescription: '' ).
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: auxTopics andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxTopics removeAll.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Smalltalk' andDescription: '' ).
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: auxTopics  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
-	lista := auxSys obtainQuestionsByTopic: findTopic.
-	self assert: (lista size ) equals: 2.
-	 
 
 
 ]
