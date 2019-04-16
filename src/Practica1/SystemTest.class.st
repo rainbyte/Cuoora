@@ -8,22 +8,18 @@ Class {
 }
 
 { #category : #tests }
-SystemTest >> testAgegarRespuesta [
+SystemTest >> testAgregarRespuesta [
 	| auxSys auxUser1 auxUser2 auxPreg auxResp |
 
 	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxUser1 := User withName: 'usuario1' andPassword: 'password1'.
 	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
+	auxUser2 := User withName: 'usuario2' andPassword: 'password2'.
 	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: nil andText: ''.
+	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	self assert: ((auxSys obtainAnswersToQuestion: auxPreg) size) equals: 0.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: nil  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
+	auxResp := Answer withUser: auxUser2 andText: 'Sirve para ...'.
 	auxPreg addAnswer: auxResp.
 	self assert: ((auxSys obtainAnswersToQuestion: auxPreg) size) equals: 1.
 
@@ -35,7 +31,7 @@ SystemTest >> testAgregarUser [
 	| auxSys auxUser1 auxUser2 |
 
 	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
 	auxSys addUser: auxUser1.
 	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
 	auxSys addUser: auxUser2.
@@ -50,32 +46,27 @@ SystemTest >> testBorrarPregunta [
 	| auxSys auxUser1 auxUser2 auxPreg auxResp |
 
 	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxUser1 := User withName: 'usuario1' andPassword: 'password1'.
 	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
+	auxUser2 := User withName: 'usuario2' andPassword: 'password2'.
 	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: nil andText: ''.
+	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: nil  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
+	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
 	auxPreg addAnswer: auxResp.
 	auxSys deleteQuestion: auxPreg.
-	self assert: ((auxSys obtainQuestionsByUser: auxUser2) size) equals: 0
-
-
+	self assert: ((auxSys obtainQuestionsByUser: auxUser1) size) equals: 0
 ]
 
 { #category : #tests }
-SystemTest >> testCrearTopic: sys [
+SystemTest >> testCrearTopico [
 	| auxTopics |
 	
 	auxTopics := Bag new.
-	auxTopics add: (Topic withName: 'OO1' andDescription: '' ).
-	auxTopics add: (Topic withName: 'Test de Unidad' andDescription: '' ).
-	^auxTopics
+	auxTopics add: (Topic withName: 'OO1' andDescription: 'Objetos 1' ).
+	auxTopics add: (Topic withName: 'TDD' andDescription: 'Test Driven Development' ).
+	
+	self assert: false equals: true
 ]
 
 { #category : #tests }
@@ -117,7 +108,7 @@ SystemTest >> testPregunta [
 	auxSys := System new.
 	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
 	auxSys addUser: auxUser1.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: nil andText: ''.
+	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	
 	self assert: ((auxSys obtainQuestionsByUser: auxUser1) size) equals: 1
@@ -126,57 +117,22 @@ SystemTest >> testPregunta [
 ]
 
 { #category : #tests }
-SystemTest >> testPreguntaDeUsuario [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp |
-
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: nil andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: nil  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
-	self assert: ((auxSys obtainQuestionsByUser: auxUser1) size) equals: 1
-
-
-]
-
-{ #category : #tests }
 SystemTest >> testPreguntasDeInteresPorSiguindo [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp auxTopics findTopic lista |
+	| auxSys auxUser1 auxUser2 auxPreg1 auxPreg2 auxPreg3 |
 
 	auxSys := System new.
-	findTopic := Topic withName: 'OO1' andDescription: ''.
-	auxTopics := Bag new.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Test de Unidad' andDescription: '' ).
 	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
 	auxSys addUser: auxUser1.
 	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
 	auxSys addUser: auxUser2.
 	auxUser1 follow: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: auxTopics andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
-	auxPreg  addAnswer: auxResp.
-	auxTopics removeAll.
-	auxTopics add: findTopic.
-	auxTopics add: (Topic withName: 'Smalltalk' andDescription: '' ).
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: auxTopics  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
-	lista := auxSys obtainQuestionsRelevantToUser: auxUser1.
-	self assert: (lista size ) equals: 1.
-	 
-
-
+	auxPreg1 := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: 'AAA,BBB' andText: ''.
+	auxSys addQuestion: auxPreg1.
+	auxPreg2 := Question withTitle: '¿Qué significa x? ' andUser: auxUser2 andRawTopics: 'BBB,CCC' andText: ''.
+	auxSys addQuestion: auxPreg2.
+	auxPreg3 := Question withTitle: '¿Qué es un x? ' andUser: auxUser2 andRawTopics: 'CCC,DDD' andText: ''.
+	auxSys addQuestion: auxPreg3.
+	self assert: ((auxSys obtainQuestionsRelevantToUser: auxUser1) size) equals: 3.
 ]
 
 { #category : #tests }
@@ -242,24 +198,38 @@ SystemTest >> testPreguntasDeTopico [
 ]
 
 { #category : #tests }
+SystemTest >> testPreguntasDeUsuario [
+	| auxSys auxUser1 auxUser2 auxPreg auxResp |
+
+	auxSys := System new.
+	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxSys addUser: auxUser1.
+	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
+	auxSys addUser: auxUser2.
+	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andTopics: '' andText: ''.
+	auxSys addQuestion: auxPreg.
+	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
+	auxPreg addAnswer: auxResp.
+	self assert: ((auxSys obtainQuestionsByUser: auxUser1) size) equals: 1.
+	self assert: ((auxSys obtainQuestionsByUser: auxUser1) includes: auxPreg) equals: true
+
+]
+
+{ #category : #tests }
 SystemTest >> testRespuestaAPregunta [
 	| auxSys auxUser1 auxUser2 auxPreg auxResp |
 
 	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
 	auxSys addUser: auxUser1.
 	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
 	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: nil andText: ''.
+	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
+	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
 	auxPreg  addAnswer: auxResp.
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: nil  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
 	self assert: ((auxSys obtainAnswersToQuestion: auxPreg) size) equals: 1.
-	"self assert: ((auxSys obtainAnswersByUser: auxUser1) size) equals: 1"
+	self assert: ((auxSys obtainAnswersToQuestion: auxPreg) includes: auxResp) equals: true.
 
 
 ]
@@ -273,15 +243,11 @@ SystemTest >> testRespuestaDeUsuario [
 	auxSys addUser: auxUser1.
 	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
 	auxSys addUser: auxUser2.
-	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1  andTopics: nil andText: ''.
+	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1  andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser2  andText: 'Sirve para instanciar los objetos que son evaluados por el test en un único método y que se ejecute siempre antes de 	test.'.
+	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
 	auxPreg  addAnswer: auxResp.
-	auxPreg := Question withTitle: '¿Qué significa #messageNotUnderstood? ' andUser: auxUser2 andTopics: nil  andText: ''.
-	auxSys addQuestion: auxPreg.
-	auxResp := Answer withUser: auxUser1  andText: 'Significa que el objeto que recibió el mensaje no encontró ningún método para ejecutar en respuesta.'.	
-	auxPreg addAnswer: auxResp.
-	self assert: ((auxSys obtainAnswersByUser: auxUser1) size) equals: 1
+	self assert: ((auxSys obtainAnswersByUser: auxUser2) size) equals: 1
 
 
 ]
