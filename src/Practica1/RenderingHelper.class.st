@@ -55,8 +55,8 @@ RenderingHelper class >> renderQuestion: question viewByUser: user inComponent: 
 											html render: (' | at {1} | {2} answers | {3} likes | {4} dislikes' format: {
 												question creation asLocalStringYMDHM.
 												question answers size.
-												question reactions count: [ :reaction | reaction emotion = Emotion like ].
-												question reactions count: [ :reaction | reaction emotion = Emotion dislike ].
+												question reactions count: [ :reaction | reaction emotion = #like ].
+												question reactions count: [ :reaction | reaction emotion = #dislike ].
 											}).
 										]
 								].
@@ -66,7 +66,7 @@ RenderingHelper class >> renderQuestion: question viewByUser: user inComponent: 
 									html anchor
 										callback: [ 
 											| reaction |
-											reaction := Reaction fromUser: user withEmotion: Emotion like. 
+											reaction := Reaction likeByUser: user. 
 											question addReaction: reaction. 
 										];
 										with: 'Like'.
@@ -74,7 +74,7 @@ RenderingHelper class >> renderQuestion: question viewByUser: user inComponent: 
 									html anchor
 										callback: [
 											| reaction |
-											reaction := Reaction fromUser: user withEmotion: Emotion dislike. 
+											reaction := Reaction dislikeByUser: user. 
 											question addReaction: reaction. 
 										];
 										with: 'Dislike'.

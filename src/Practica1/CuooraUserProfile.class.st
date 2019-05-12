@@ -10,26 +10,33 @@ Class {
 
 { #category : #'as yet unclassified' }
 CuooraUserProfile class >> withCurrentUser: anUser andProfileUser: otherUser [
-	^CuooraUserProfile new _currentUser: anUser; _profileUser: otherUser; yourself
+	^CuooraUserProfile new currentUser: anUser; profileUser: otherUser; yourself
 ]
 
-{ #category : #accessing }
-CuooraUserProfile >> _currentUser: anUser [
+{ #category : #private }
+CuooraUserProfile >> currentUser: anUser [
 	currentUser := anUser
 ]
 
-{ #category : #accessing }
-CuooraUserProfile >> _profileUser: anUser [
+{ #category : #private }
+CuooraUserProfile >> profileUser: anUser [
 	profileUser := anUser
 ]
 
 { #category : #rendering }
-CuooraUserProfile >> _renderHeaderOn: html [
+CuooraUserProfile >> renderContentOn: html [
+	self renderHeaderOn: html.
+	html horizontalRule.
+	self renderProfileOn: html.
+]
+
+{ #category : #private }
+CuooraUserProfile >> renderHeaderOn: html [
 	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html 
 ]
 
-{ #category : #rendering }
-CuooraUserProfile >> _renderProfileOn: html [
+{ #category : #private }
+CuooraUserProfile >> renderProfileOn: html [
 	html heading: ('Questions by {1}' format: {(profileUser name)}).
 	html anchor
 		callback: [ currentUser follow: profileUser ];
@@ -37,13 +44,6 @@ CuooraUserProfile >> _renderProfileOn: html [
 	((System getInstance) obtainQuestionsByUser: profileUser)
 		do: [ :question | RenderingHelper renderQuestion: question viewByUser: currentUser inComponent: self usingBrush: html ]
 
-]
-
-{ #category : #rendering }
-CuooraUserProfile >> renderContentOn: html [
-	self _renderHeaderOn: html.
-	html horizontalRule.
-	self _renderProfileOn: html.
 ]
 
 { #category : #hooks }

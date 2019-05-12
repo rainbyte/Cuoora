@@ -85,11 +85,7 @@ System >> loginWithUsername: aUsername andPassword: aPassword [
 
 { #category : #'as yet unclassified' }
 System >> obtainAnswersByUser: user [
-	| byUser reduction |
-	byUser := [ :answer | answer user = user ].
-	reduction := [ :acc :q | acc addAll: (q answers select: byUser) ].
-	^(questions inject: Bag new into: reduction)
-	"user collect y flattened o mejor flatCollect.... y usar asBag, asSet para asegurarme"
+	^questions flatCollect: [ :q | q answersByUser: user ] as: Bag.
 ]
 
 { #category : #'as yet unclassified' }
@@ -99,7 +95,7 @@ System >> obtainAnswersToQuestion: question [
 
 { #category : #'as yet unclassified' }
 System >> obtainQuestionsByTopic: topic [
-	^questions select: [ :q | (q topics) anySatisfy: [ :topicName | topicName = topic name] ]
+	^questions select: [ :question | question hasTopic: topic ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -124,6 +120,13 @@ System >> obtainQuestionsRelevantToUser: anUser sortedByDateTake: aNumber [
 { #category : #'as yet unclassified' }
 System >> obtainUsers [
 	^users
+]
+
+{ #category : #'as yet unclassified' }
+System >> registerMissingTopics: rawTopics [
+	| candidates |
+	candidates := Question rawTopicsToTopics: rawTopics.
+	candidates do: [ :candidate | self addTopic: (Topic withName: candidate) ]
 ]
 
 { #category : #accessing }

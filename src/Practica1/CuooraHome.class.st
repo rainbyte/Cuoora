@@ -9,17 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 CuooraHome class >> withUser: aUser [
-	^ CuooraHome new _user: aUser; yourself 
-]
-
-{ #category : #rendering }
-CuooraHome >> _renderHeaderOn: html [
-	RenderingHelper renderHeaderViewByUser: user inComponent: self usingBrush: html 
-]
-
-{ #category : #accessing }
-CuooraHome >> _user: aUser [
-	user := aUser
+	^ CuooraHome new user: aUser; yourself 
 ]
 
 { #category : #initialization }
@@ -29,9 +19,14 @@ CuooraHome >> initialize [
 
 { #category : #rendering }
 CuooraHome >> renderContentOn: html [
-	self _renderHeaderOn: html.
+	self renderHeaderOn: html.
 	html horizontalRule.
 	self renderLastQuestions: html.
+]
+
+{ #category : #'private ' }
+CuooraHome >> renderHeaderOn: html [
+	RenderingHelper renderHeaderViewByUser: user inComponent: self usingBrush: html 
 ]
 
 { #category : #rendering }
@@ -51,4 +46,9 @@ CuooraHome >> renderLastQuestions: html [
 { #category : #hooks }
 CuooraHome >> style [
 	^	RenderingHelper style
+]
+
+{ #category : #accessing }
+CuooraHome >> user: aUser [
+	user := aUser
 ]

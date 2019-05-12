@@ -10,39 +10,19 @@ Class {
 	#category : #'Practica1-Core'
 }
 
-{ #category : #accessing }
-Question class >> _rawTopicsToTopics: rawTopics [
+{ #category : #private }
+Question class >> rawTopicsToTopics: rawTopics [
   ^(rawTopics = '') ifTrue: [ Bag new ] ifFalse: [ (rawTopics splitOn: ',') asBag ]
 ]
 
 { #category : #'as yet unclassified' }
 Question class >> withTitle: aTitle andUser: aUser andRawTopics: rawTopics andText: text [
-	^self new _title: aTitle; _user: aUser; _topics: (self _rawTopicsToTopics: rawTopics); _text: text; yourself
+	^self new title: aTitle; user: aUser; topics: (self rawTopicsToTopics: rawTopics); text: text; yourself
 ]
 
 { #category : #'as yet unclassified' }
 Question class >> withTitle: aTitle andUser: aUser andTopics: topics andText: text [
-	^self new _title: aTitle; _user: aUser; _topics: topics; _text: text; yourself
-]
-
-{ #category : #accessing }
-Question >> _text: aText [
-	content text: aText
-]
-
-{ #category : #accessing }
-Question >> _title: anObject [
-	title := anObject
-]
-
-{ #category : #accessing }
-Question >> _topics: theTopics [
-	topics := theTopics asBag
-]
-
-{ #category : #accessing }
-Question >> _user: aUser [
-	content user: aUser
+	^self new title: aTitle; user: aUser; topics: topics; text: text; yourself
 ]
 
 { #category : #adding }
@@ -60,9 +40,20 @@ Question >> answers [
 	^answers
 ]
 
+{ #category : #'as yet unclassified' }
+Question >> answersByUser: anUser [
+	^self answers select: [ :answer | answer user = anUser ].
+
+]
+
 { #category : #accessing }
 Question >> creation [
 	^content creation
+]
+
+{ #category : #testing }
+Question >> hasTopic: aTopic [
+	^(self topics) anySatisfy: [ :topicName | topicName = aTopic name]
 ]
 
 { #category : #initialization }
@@ -88,8 +79,18 @@ Question >> reactions [
 ]
 
 { #category : #accessing }
+Question >> text: aText [
+	content text: aText
+]
+
+{ #category : #accessing }
 Question >> title [
 	^ title
+]
+
+{ #category : #'private ' }
+Question >> title: anObject [
+	title := anObject
 ]
 
 { #category : #accessing }
@@ -97,7 +98,17 @@ Question >> topics [
 	^topics 
 ]
 
+{ #category : #'private ' }
+Question >> topics: theTopics [
+	topics := theTopics asBag
+]
+
 { #category : #accessing }
 Question >> user [
 	^content user
+]
+
+{ #category : #accessing }
+Question >> user: aUser [
+	content user: aUser
 ]

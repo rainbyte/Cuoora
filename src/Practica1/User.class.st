@@ -13,12 +13,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 User class >> withName: aName andPassword: aPassword [
-	^self new _name: aName; _password: aPassword; yourself
-]
-
-{ #category : #accessing }
-User >> _name: anObject [
-	name := anObject
+	^self new name: aName; _password: aPassword; yourself
 ]
 
 { #category : #accessing }
@@ -58,6 +53,11 @@ User >> initialize [
 { #category : #accessing }
 User >> name [
 	^ name
+]
+
+{ #category : #accessing }
+User >> name: anObject [
+	name := anObject
 ]
 
 { #category : #accessing }

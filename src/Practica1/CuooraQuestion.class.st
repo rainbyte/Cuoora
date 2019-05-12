@@ -10,21 +10,21 @@ Class {
 
 { #category : #'as yet unclassified' }
 CuooraQuestion class >> withCurrentUser: anUser andQuestion: aQuestion [
-	^CuooraQuestion new _currentUser: anUser; _question: aQuestion; yourself
+	^CuooraQuestion new currentUser: anUser; question: aQuestion; yourself
 ]
 
-{ #category : #accessing }
-CuooraQuestion >> _currentUser: anUser [
+{ #category : #'private ' }
+CuooraQuestion >> currentUser: anUser [
 	currentUser := anUser
 ]
 
-{ #category : #'as yet unclassified' }
-CuooraQuestion >> _question: aQuestion [
+{ #category : #'private ' }
+CuooraQuestion >> question: aQuestion [
 	question := aQuestion
 ]
 
-{ #category : #rendering }
-CuooraQuestion >> _renderAnswer: anAnswer withBrush: html [
+{ #category : #'private ' }
+CuooraQuestion >> renderAnswer: anAnswer withBrush: html [
 	html div
 		with: [
 			html div
@@ -47,8 +47,8 @@ CuooraQuestion >> _renderAnswer: anAnswer withBrush: html [
 						with: [ 
 							html render: ('created at {1} | {2} likes | {3} dislikes' format: {
 								anAnswer creation asLocalStringYMDHM.
-								anAnswer reactions count: [ :reaction | reaction emotion = Emotion like ].
-								anAnswer reactions count: [ :reaction | reaction emotion = Emotion dislike ].
+								anAnswer reactions count: [ :reaction | reaction emotion = #like ].
+								anAnswer reactions count: [ :reaction | reaction emotion = #dislike ].
 							}).
 						]
 				].
@@ -58,7 +58,7 @@ CuooraQuestion >> _renderAnswer: anAnswer withBrush: html [
 					html anchor
 						callback: [ 
 							| reaction |
-							reaction := Reaction fromUser: currentUser withEmotion: Emotion like. 
+							reaction := Reaction likeByUser: currentUser. 
 							anAnswer addReaction: reaction. 
 						];
 						with: 'Like'.
@@ -66,7 +66,7 @@ CuooraQuestion >> _renderAnswer: anAnswer withBrush: html [
 					html anchor
 						callback: [
 							| reaction |
-							reaction := Reaction fromUser: currentUser withEmotion: Emotion dislike. 
+							reaction := Reaction dislikByUser: currentUser. 
 							anAnswer addReaction: reaction. 
 						];
 						with: 'Dislike'.
@@ -75,32 +75,32 @@ CuooraQuestion >> _renderAnswer: anAnswer withBrush: html [
 ]
 
 { #category : #rendering }
-CuooraQuestion >> _renderFooterOn: html [
+CuooraQuestion >> renderContentOn: html [
+	self renderHeaderOn: html.
+	html horizontalRule.
+	self renderQuestionOn: html.	
+	html horizontalRule.
+	self renderFooterOn: html.
+]
+
+{ #category : #'private ' }
+CuooraQuestion >> renderFooterOn: html [
 	html paragraph: 'No more answers'.
 	html anchor
 		callback: [ self call: (CuooraAddAnswer withCurrentUser: currentUser toQuestion: question) ];
 		with: '(+) Answer this question'
 ]
 
-{ #category : #rendering }
-CuooraQuestion >> _renderHeaderOn: html [
+{ #category : #'private ' }
+CuooraQuestion >> renderHeaderOn: html [
 	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html
 ]
 
-{ #category : #rendering }
-CuooraQuestion >> _renderQuestionOn: html [
+{ #category : #'private ' }
+CuooraQuestion >> renderQuestionOn: html [
 	RenderingHelper renderQuestion: question viewByUser: currentUser inComponent: self usingBrush: html. 
-	(question answers) do: [ :answer | self _renderAnswer: answer withBrush: html ].
+	(question answers) do: [ :answer | self renderAnswer: answer withBrush: html ].
 	
-]
-
-{ #category : #rendering }
-CuooraQuestion >> renderContentOn: html [
-	self _renderHeaderOn: html.
-	html horizontalRule.
-	self _renderQuestionOn: html.	
-	html horizontalRule.
-	self _renderFooterOn: html.
 ]
 
 { #category : #hooks }

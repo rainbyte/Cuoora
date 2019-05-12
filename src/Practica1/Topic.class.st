@@ -11,29 +11,24 @@ Class {
 { #category : #'as yet unclassified' }
 Topic class >> withName: nombre [
 
-	^self new _name: nombre; yourself 
+	^self new name: nombre; yourself 
 ]
 
 { #category : #'as yet unclassified' }
 Topic class >> withName: nombre andDescription: descr [
 	
-	^self new _name: nombre; _description: descr; yourself 
-]
-
-{ #category : #'as yet unclassified' }
-Topic >> _description: descr [
-
-	description := descr
-]
-
-{ #category : #accessing }
-Topic >> _name: eName [
-	name := eName
+	^self new name: nombre; description: descr; yourself 
 ]
 
 { #category : #accessing }
 Topic >> description [
 	^ description
+]
+
+{ #category : #private }
+Topic >> description: descr [
+
+	description := descr
 ]
 
 { #category : #initialization }
@@ -46,4 +41,9 @@ Topic >> initialize [
 { #category : #accessing }
 Topic >> name [
 	^ name
+]
+
+{ #category : #private }
+Topic >> name: eName [
+	name := eName
 ]

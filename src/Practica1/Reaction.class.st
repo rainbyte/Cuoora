@@ -10,18 +10,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-Reaction class >> fromUser: anUser withEmotion: anEmotion [
-	^Reaction new _user: anUser; _emotion: anEmotion; yourself
+Reaction class >> dislikeByUser: anUser [
+	^Reaction new user: anUser; emotion: #dislike; yourself
 ]
 
-{ #category : #accessing }
-Reaction >> _emotion: anEmotion [
-	emotion := anEmotion
-]
-
-{ #category : #accessing }
-Reaction >> _user: anUser [
-	user := anUser
+{ #category : #'instance creation' }
+Reaction class >> likeByUser: anUser [
+	^Reaction new user: anUser; emotion: #like; yourself
 ]
 
 { #category : #accessing }
@@ -34,6 +29,11 @@ Reaction >> emotion [
 	^ emotion
 ]
 
+{ #category : #'private ' }
+Reaction >> emotion: anEmotion [
+	emotion := anEmotion
+]
+
 { #category : #initialization }
 Reaction >> initialize [
 	creation := DateAndTime now.
@@ -42,4 +42,9 @@ Reaction >> initialize [
 { #category : #accessing }
 Reaction >> user [
 	^ user
+]
+
+{ #category : #'private ' }
+Reaction >> user: anUser [
+	user := anUser
 ]

@@ -11,43 +11,38 @@ Class {
 
 { #category : #'as yet unclassified' }
 CuooraAddAnswer class >> withCurrentUser: anUser toQuestion: aQuestion [
-	^CuooraAddAnswer new _currentUser: anUser; _question: aQuestion; yourself
+	^CuooraAddAnswer new currentUser: anUser; question: aQuestion; yourself
 ]
 
-{ #category : #accessing }
-CuooraAddAnswer >> _answerText [
+{ #category : #private }
+CuooraAddAnswer >> answerText [
 	^ answerText
 ]
 
-{ #category : #accessing }
-CuooraAddAnswer >> _answerText: anObject [
+{ #category : #private }
+CuooraAddAnswer >> answerText: anObject [
 	answerText := anObject
 ]
 
-{ #category : #accessing }
-CuooraAddAnswer >> _currentUser: anUser [
+{ #category : #private }
+CuooraAddAnswer >> currentUser: anUser [
 	currentUser := anUser
 ]
 
-{ #category : #'as yet unclassified' }
-CuooraAddAnswer >> _question: aQuestion [
+{ #category : #private }
+CuooraAddAnswer >> question: aQuestion [
 	question := aQuestion
-]
-
-{ #category : #'as yet unclassified' }
-CuooraAddAnswer >> _renderHeaderOn: html [
-	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html
 ]
 
 { #category : #rendering }
 CuooraAddAnswer >> renderContentOn: html [
-	self _renderHeaderOn: html.
+	self renderHeaderOn: html.
 	html horizontalRule.
 	RenderingHelper renderQuestion: question viewByUser: currentUser inComponent: self usingBrush: html. 
 	html horizontalRule.
 	html form: [ 
 		html text: 'Answer: '.
-		html textInput on: #_answerText of: self.
+		html textInput on: #answerText of: self.
 		html break.
 		html submitButton
 			callback: [ self call: (CuooraQuestion withCurrentUser: currentUser andQuestion: question) ];
@@ -59,6 +54,11 @@ CuooraAddAnswer >> renderContentOn: html [
 			];
 			value: 'Save'.
 	]
+]
+
+{ #category : #private }
+CuooraAddAnswer >> renderHeaderOn: html [
+	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html
 ]
 
 { #category : #hooks }

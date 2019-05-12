@@ -9,17 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 Answer class >> withUser: aUser andText: text [
-	^self new _user: aUser; _text: text; yourself
-]
-
-{ #category : #accessing }
-Answer >> _text: aText [
-	content text: aText
-]
-
-{ #category : #accessing }
-Answer >> _user: anUser [
-	content user: anUser
+	^self new user: aUser; text: text; yourself
 ]
 
 { #category : #adding }
@@ -48,7 +38,17 @@ Answer >> text [
 	^content text
 ]
 
+{ #category : #'private ' }
+Answer >> text: aText [
+	content text: aText
+]
+
 { #category : #accessing }
 Answer >> user [
 	^content user
+]
+
+{ #category : #accessing }
+Answer >> user: anUser [
+	content user: anUser
 ]

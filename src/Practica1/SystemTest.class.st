@@ -4,18 +4,28 @@ A SystemTest is a test class for testing the behavior of System
 Class {
 	#name : #SystemTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'auxSys',
+		'auxUser1',
+		'auxUser2'
+	],
 	#category : #'Practica1-Tests'
 }
 
+{ #category : #running }
+SystemTest >> setUp [
+	auxSys := System new.	
+	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
+	auxSys addUser: auxUser1.
+	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
+	auxSys addUser: auxUser2.
+
+]
+
 { #category : #tests }
 SystemTest >> testAgregarRespuesta [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp |
+	| auxPreg auxResp |
 
-	auxSys := System new.
-	auxUser1 := User withName: 'usuario1' andPassword: 'password1'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'usuario2' andPassword: 'password2'.
-	auxSys addUser: auxUser2.
 	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	self assert: ((auxSys obtainAnswersToQuestion: auxPreg) size) equals: 0.
@@ -28,14 +38,6 @@ SystemTest >> testAgregarRespuesta [
 
 { #category : #tests }
 SystemTest >> testAgregarUser [
-	| auxSys auxUser1 auxUser2 |
-
-	auxSys := System new.
-	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
-
 	self assert: (auxSys obtainUsers size ) equals: 2. 
 
 
@@ -43,13 +45,8 @@ SystemTest >> testAgregarUser [
 
 { #category : #tests }
 SystemTest >> testBorrarPregunta [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp |
+	| auxPreg auxResp |
 
-	auxSys := System new.
-	auxUser1 := User withName: 'usuario1' andPassword: 'password1'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'usuario2' andPassword: 'password2'.
-	auxSys addUser: auxUser2.
 	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
@@ -60,9 +57,6 @@ SystemTest >> testBorrarPregunta [
 
 { #category : #tests }
 SystemTest >> testCrearTopico [
-	| auxSys |
-	
-	auxSys := System new.
 	auxSys addTopic: (Topic withName: 'OO1' andDescription: 'Objetos 1' ).
 	auxSys addTopic: (Topic withName: 'OO1' andDescription: 'Objetos 1' ).
 	auxSys addTopic: (Topic withName: 'TDD' andDescription: 'Test Driven Development' ).
@@ -71,31 +65,7 @@ SystemTest >> testCrearTopico [
 ]
 
 { #category : #tests }
-SystemTest >> testLoginWithName [
-	| auxSys auxUser1 auxUser2 |
-
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
-	
-	self assert: ((auxSys loginWithUsername: 'Pedro@cuoora.com'  andPassword: 'Pedro@cuoora.com') name) equals: auxUser1 name.
-	self assert: ((auxSys loginWithUsername: 'Diego@cuoora.com'  andPassword: 'Diego@cuoora.com') name) equals: auxUser2 name 
-
-
-]
-
-{ #category : #tests }
-SystemTest >> testLoginWithObject [
-	| auxSys auxUser1 auxUser2 |
-
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
-	
+SystemTest >> testLogin [
 	self assert: (auxSys loginWithUsername: 'Pedro@cuoora.com'  andPassword: 'Pedro@cuoora.com') equals: auxUser1.
 	self assert: (auxSys loginWithUsername: 'Diego@cuoora.com'  andPassword: 'Diego@cuoora.com') equals: auxUser2
 
@@ -103,12 +73,16 @@ SystemTest >> testLoginWithObject [
 ]
 
 { #category : #tests }
-SystemTest >> testPregunta [
-	| auxSys auxUser1 auxPreg |
+SystemTest >> testLoginNotExists [
+	self assert: (auxSys loginWithUsername: 'qwerty'  andPassword: 'qwerty') equals: nil.
 
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
+
+]
+
+{ #category : #tests }
+SystemTest >> testPregunta [
+	| auxPreg |
+
 	auxPreg := Question withTitle: '¿Para que sirve el metodo SetUp?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	
@@ -119,13 +93,8 @@ SystemTest >> testPregunta [
 
 { #category : #tests }
 SystemTest >> testPreguntasDeInteresPorSiguindo [
-	| auxSys auxUser1 auxUser2 auxPreg1 auxPreg2 auxPreg3 |
+	| auxPreg1 auxPreg2 auxPreg3 |
 
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
 	auxUser1 follow: auxUser2.
 	auxPreg1 := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: 'AAA,BBB' andText: ''.
 	auxSys addQuestion: auxPreg1.
@@ -138,14 +107,9 @@ SystemTest >> testPreguntasDeInteresPorSiguindo [
 
 { #category : #tests }
 SystemTest >> testPreguntasDeInteresPorTopico [
-	| auxSys auxUser1 auxUser2 auxPreg1 auxPreg2 auxPreg3 |
+	| auxPreg1 auxPreg2 auxPreg3 |
 
-	auxSys := System new.
-	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
 	auxUser1 addInterestInTopic: 'BBB'. 
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
 	auxPreg1 := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: 'AAA,BBB' andText: ''.
 	auxSys addQuestion: auxPreg1.
 	auxPreg2 := Question withTitle: '¿Qué significa x? ' andUser: auxUser2 andRawTopics: 'BBB,CCC' andText: ''.
@@ -157,13 +121,8 @@ SystemTest >> testPreguntasDeInteresPorTopico [
 
 { #category : #tests }
 SystemTest >> testPreguntasDeTopico [
-	| auxSys auxUser1 auxUser2 auxPreg1 auxPreg2 auxPreg3 |
+	| auxPreg1 auxPreg2 auxPreg3 |
 
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
 	auxUser1 follow: auxUser2.
 	auxPreg1 := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: 'AAA,BBB' andText: ''.
 	auxSys addQuestion: auxPreg1.
@@ -176,13 +135,8 @@ SystemTest >> testPreguntasDeTopico [
 
 { #category : #tests }
 SystemTest >> testPreguntasDeUsuario [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp |
+	| auxPreg auxResp |
 
-	auxSys := System new.
-	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
 	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
@@ -194,13 +148,8 @@ SystemTest >> testPreguntasDeUsuario [
 
 { #category : #tests }
 SystemTest >> testRespuestaAPregunta [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp |
+	| auxPreg auxResp |
 
-	auxSys := System new.
-	auxUser1 := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
 	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1 andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.
@@ -213,13 +162,8 @@ SystemTest >> testRespuestaAPregunta [
 
 { #category : #tests }
 SystemTest >> testRespuestaDeUsuario [
-	| auxSys auxUser1 auxUser2 auxPreg auxResp |
+	| auxPreg auxResp |
 
-	auxSys := System new.
-	auxUser1  := User withName: 'Pedro@cuoora.com' andPassword: 'Pedro@cuoora.com'.
-	auxSys addUser: auxUser1.
-	auxUser2 := User withName: 'Diego@cuoora.com' andPassword: 'Diego@cuoora.com'.
-	auxSys addUser: auxUser2.
 	auxPreg := Question withTitle: '¿Para que sirve x?' andUser: auxUser1  andRawTopics: '' andText: ''.
 	auxSys addQuestion: auxPreg.
 	auxResp := Answer withUser: auxUser2  andText: 'Sirve para ...'.

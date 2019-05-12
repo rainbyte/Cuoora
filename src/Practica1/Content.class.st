@@ -26,12 +26,12 @@ Content >> addReaction: aReaction [
 
 { #category : #'as yet unclassified' }
 Content >> countDislikes [
-	^reactions count: [ :reaction | reaction emotion = Emotion dislike ].
+	^reactions count: [ :reaction | reaction emotion = #dislike ].
 ]
 
 { #category : #'as yet unclassified' }
 Content >> countLikes [
-	^reactions count: [ :reaction | reaction emotion = Emotion like ].
+	^reactions count: [ :reaction | reaction emotion = #like ].
 ]
 
 { #category : #accessing }

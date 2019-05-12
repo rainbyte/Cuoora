@@ -12,62 +12,57 @@ Class {
 
 { #category : #'as yet unclassified' }
 CuooraAddQuestion class >> withCurrentUser: anUser [
-	^CuooraAddQuestion new _currentUser: anUser; yourself
+	^CuooraAddQuestion new currentUser: anUser; yourself
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _currentUser: anUser [
+{ #category : #private }
+CuooraAddQuestion >> currentUser: anUser [
 	currentUser := anUser
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _questionRawTopics [
+{ #category : #private }
+CuooraAddQuestion >> questionRawTopics [
 	^ _questionRawTopics
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _questionRawTopics: anObject [
+{ #category : #private }
+CuooraAddQuestion >> questionRawTopics: anObject [
 	_questionRawTopics := anObject
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _questionText [
+{ #category : #private }
+CuooraAddQuestion >> questionText [
 	^ _questionText
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _questionText: anObject [
+{ #category : #private }
+CuooraAddQuestion >> questionText: anObject [
 	_questionText := anObject
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _questionTitle [
+{ #category : #private }
+CuooraAddQuestion >> questionTitle [
 	^ _questionTitle
 ]
 
-{ #category : #accessing }
-CuooraAddQuestion >> _questionTitle: anObject [
+{ #category : #private }
+CuooraAddQuestion >> questionTitle: anObject [
 	_questionTitle := anObject
-]
-
-{ #category : #'as yet unclassified' }
-CuooraAddQuestion >> _renderHeaderOn: html [
-	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html 
 ]
 
 { #category : #rendering }
 CuooraAddQuestion >> renderContentOn: html [
-	self _renderHeaderOn: html.
+	self renderHeaderOn: html.
 	html horizontalRule.
 	html form: [
 		html text: 'Title: '.
-		html textInput on: #_questionTitle of: self.
+		html textInput on: #questionTitle of: self.
 		html break.
 		html text: 'Content: '.
-		html textInput on: #_questionText of: self.
+		html textInput on: #questionText of: self.
 		html break.
 		html text: 'Topics: '.
-		html textInput on: #_questionRawTopics of: self.
+		html textInput on: #questionRawTopics of: self.
 		html break.
 		html submitButton
 			callback: [ self call: (CuooraHome withUser: currentUser) ];
@@ -75,6 +70,7 @@ CuooraAddQuestion >> renderContentOn: html [
 		html submitButton
 			callback: [
 				| question |
+				System getInstance registerMissingTopics: _questionRawTopics.
 				question := Question
 					withTitle: _questionTitle
 					andUser: currentUser
@@ -86,6 +82,11 @@ CuooraAddQuestion >> renderContentOn: html [
 			value: 'Save'.
 	]
 	
+]
+
+{ #category : #private }
+CuooraAddQuestion >> renderHeaderOn: html [
+	RenderingHelper renderHeaderViewByUser: currentUser inComponent: self usingBrush: html 
 ]
 
 { #category : #hooks }
